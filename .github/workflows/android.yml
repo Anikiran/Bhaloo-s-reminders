@@ -79,7 +79,9 @@ jobs:
             Version ${{ steps.apk.outputs.version }}, built from `${{ github.sha }}`.
             Installing over an older copy is fine — reminders are kept.
           files: out/*.apk
-          prerelease: true
+          # Must NOT be a prerelease: GitHub's /releases/latest endpoint skips
+          # prereleases, which would leave that link permanently 404.
+          prerelease: false
           make_latest: true
 
       - name: Upload test report on failure
