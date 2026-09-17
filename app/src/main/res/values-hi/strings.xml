@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">भालू के रिमाइंडर</string>
+    <string name="home_subtitle">भालू, अब कुछ नहीं भूलेगा</string>
+
+    <string name="dedication_tagline">सिर्फ़ भालू के लिए बनाई गई ऐप।</string>
+    <string name="dedication_headline">भालू के लिए</string>
+    <string name="dedication_body">इस ऐप का हर रिमाइंडर तुम्हारे नाम है, भालू। ये तुमसे तुम्हारी भाषा में, ठीक उसी समय बात करेगा जो तुमने तय किया है।</string>
+    <string name="signature_anonymous">भालू के लिए, दिल से बनाई गई।</string>
+    <string name="signature_named">भालू के लिए %1$s ने बनाई।</string>
+    <string name="easter_egg_hint">भालू की फ़ोटो पर कुछ बार टैप करो…</string>
+    <string name="easter_egg_title">अरे भालू! 🐻</string>
+    <string name="easter_egg_body">मिल गया! किसी ने तुम्हारे लिए पूरी ऐप बना डाली, सिर्फ़ इसलिए कि तुम्हारा दिन सही चले। चाय पी लो।</string>
+
+    <string name="new_reminder">नया रिमाइंडर</string>
+    <string name="edit_reminder">रिमाइंडर बदलें</string>
+    <string name="settings">सेटिंग्स</string>
+    <string name="about">ऐप के बारे में</string>
+    <string name="back">वापस</string>
+    <string name="delete">हटाएँ</string>
+    <string name="untitled">(बिना नाम)</string>
+    <string name="empty_title">अभी कोई रिमाइंडर नहीं है</string>
+    <string name="empty_body">“नया रिमाइंडर” दबाओ और बताओ भालू को क्या याद दिलाना है।</string>
+    <string name="exact_alarm_title">सही समय पर अलार्म की अनुमति नहीं है</string>
+    <string name="exact_alarm_body">रिमाइंडर ठीक मिनट पर बजे, इसके लिए अनुमति चाहिए। यहाँ टैप करें।</string>
+
+    <string name="section_voice">भालू क्या सुनेगा</string>
+    <string name="section_when">कब</string>
+    <string name="section_how">कैसे बताए</string>
+    <string name="field_title">रिमाइंडर का नाम</string>
+    <string name="field_title_hint">दवाई लेनी है</string>
+    <string name="field_message">बोला जाने वाला संदेश</string>
+    <string name="field_message_help">यही शब्द ज़ोर से बोले जाएँगे। भालू का नाम अपने आप जुड़ जाता है।</string>
+    <string name="field_quick_picks">झटपट विकल्प</string>
+    <string name="field_speak_times">%1$d बार बोलो</string>
+    <string name="field_repeat">दोहराव</string>
+    <string name="field_vibrate">वाइब्रेशन</string>
+    <string name="field_special">ख़ास दिन</string>
+    <string name="field_special_help">जन्मदिन जैसे दिनों पर एक प्यारी लाइन पहले बोली जाएगी।</string>
+    <string name="field_note">निजी नोट (बोला नहीं जाएगा)</string>
+    <string name="schedule_next">अगली बार: %1$s (%2$s)</string>
+    <string name="schedule_in_past">ये समय निकल चुका है — आगे का समय चुनो।</string>
+    <string name="error_no_title">नाम या संदेश में से कुछ तो लिखो।</string>
+    <string name="error_no_days">कम से कम एक दिन चुनो।</string>
+    <string name="pick_time">समय चुनें</string>
+    <string name="delete_title">ये रिमाइंडर हटाएँ?</string>
+    <string name="delete_body">“%1$s” अब भालू को याद नहीं दिलाएगा।</string>
+
+    <string name="repeat_once">एक बार</string>
+    <string name="repeat_daily">रोज़</string>
+    <string name="repeat_weekly">हर हफ़्ते</string>
+    <string name="repeat_monthly">हर महीने</string>
+    <string name="repeat_yearly">हर साल</string>
+    <string name="repeat_custom">चुने हुए दिन</string>
+
+    <string name="alert_notification">सिर्फ़ नोटिफ़िकेशन</string>
+    <string name="alert_voice">सिर्फ़ आवाज़</string>
+    <string name="alert_both">नोटिफ़िकेशन + आवाज़</string>
+
+    <string name="action_save">रिमाइंडर सेव करें</string>
+    <string name="action_ok">ठीक है</string>
+    <string name="action_cancel">रद्द करें</string>
+    <string name="action_close">बंद करें</string>
+    <string name="action_done">हो गया</string>
+    <string name="action_snooze">थोड़ी देर बाद</string>
+    <string name="action_repeat">फिर से बोलो</string>
+    <string name="action_hear_it">अभी सुनो</string>
+    <string name="action_stop">रोको</string>
+
+    <string name="channel_reminders">भालू के रिमाइंडर</string>
+    <string name="channel_reminders_desc">भालू ने जो याद रखने को कहा, समय पर।</string>
+    <string name="channel_speaking">बोल रहा है</string>
+    <string name="channel_speaking_desc">जब रिमाइंडर ज़ोर से बोला जा रहा हो।</string>
+    <string name="notif_title">भालू — %1$s</string>
+    <string name="notif_special_title">🎂 भालू — %1$s</string>
+    <string name="notif_default_body">भालू, समय हो गया है।</string>
+    <string name="speaking_title">भालू से बात हो रही है…</string>
+    <string name="alert_missing">ये रिमाइंडर अब मौजूद नहीं है।</string>
+    <string name="toast_done">शाबाश भालू!</string>
+    <string name="toast_snoozed">ठीक है — %1$d मिनट बाद फिर बताऊँगा।</string>
+
+    <string name="settings_voice">आवाज़</string>
+    <string name="settings_rate">रफ़्तार: %1$s</string>
+    <string name="settings_pitch">पिच: %1$s</string>
+    <string name="settings_test_en">English टेस्ट</string>
+    <string name="settings_test_hi">हिंदी टेस्ट</string>
+    <string name="settings_install_voice">आवाज़ का डेटा इंस्टॉल करें</string>
+    <string name="settings_install_voice_help">अगर हिंदी नहीं बोलती, तो यहाँ से एक बार हिंदी आवाज़ इंस्टॉल कर लो। फिर बिना इंटरनेट भी चलेगी।</string>
+    <string name="settings_snooze">थोड़ी देर बाद</string>
+    <string name="settings_snooze_value">%1$d मिनट बाद फिर बताओ</string>
+    <string name="settings_reliability">भरोसा</string>
+    <string name="settings_exact_ok">सही समय पर अलार्म की अनुमति है।</string>
+    <string name="settings_exact_missing">अनुमति नहीं है, रिमाइंडर थोड़ा देर से आ सकता है।</string>
+    <string name="settings_allow_exact">अनुमति दें</string>
+    <string name="settings_battery">बैटरी सेविंग से छूट दें</string>
+    <string name="settings_battery_help">Xiaomi, Oppo, Vivo, OnePlus फ़ोन में Autostart भी चालू करना ज़रूरी है।</string>
+    <string name="settings_rearm">सभी रिमाइंडर दोबारा सेट करें</string>
+    <string name="settings_signature">हस्ताक्षर</string>
+    <string name="settings_made_by">आपका नाम</string>
+    <string name="settings_made_by_help">ये नाम डेडिकेशन पेज पर दिखेगा।</string>
+
+    <string name="stats_title">भालू, आँकड़ों में</string>
+    <string name="stats_times">कितनी बार याद दिलाया</string>
+    <string name="stats_active">चालू रिमाइंडर</string>
+    <string name="stats_completed">पूरे किए गए</string>
+    <string name="stats_days">कितने दिनों से साथ हैं</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Status-bar icon: a flat white bear head, as Android requires. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="#FFFFFFFF">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M3.8,7 a3.2,3.2 0 1,0 6.4,0 a3.2,3.2 0 1,0 -6.4,0 Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M13.8,7 a3.2,3.2 0 1,0 6.4,0 a3.2,3.2 0 1,0 -6.4,0 Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M4.6,13.5 a7.4,6.8 0 1,0 14.8,0 a7.4,6.8 0 1,0 -14.8,0 Z" />
+</vector>
