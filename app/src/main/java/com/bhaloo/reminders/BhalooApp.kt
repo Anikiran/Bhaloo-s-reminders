@@ -2,6 +2,7 @@ package com.bhaloo.reminders
 
 import android.app.Application
 import com.bhaloo.reminders.alarm.ReminderScheduler
+import com.bhaloo.reminders.data.BirthdaySeed
 import com.bhaloo.reminders.data.ReminderStore
 import com.bhaloo.reminders.notify.Notifications
 
@@ -22,6 +23,20 @@ class BhalooApp : Application() {
         store = ReminderStore(this)
         Notifications.createChannels(this)
         store.installedAt // stamps the "together since" date on first launch
+        seedBirthday()
         ReminderScheduler.rescheduleAll(this, store.reminders.value)
+    }
+
+    /** On the very first launch, the birthday is already there waiting. */
+    private fun seedBirthday() {
+        if (store.hasSeeded) return
+        store.hasSeeded = true
+        val seeded = store.upsert(
+            BirthdaySeed.build(
+                title = getString(R.string.seed_birthday_title),
+                note = getString(R.string.seed_birthday_note)
+            )
+        )
+        ReminderScheduler.schedule(this, seeded)
     }
 }

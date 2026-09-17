@@ -8,8 +8,8 @@ in a few minutes each.
 
 | Touch | Where he sees it |
 |---|---|
-| His face is the app icon | Home screen, app drawer, recents, share sheet |
-| A welcome card with his photo | Every launch, two seconds |
+| Their face is the app icon | Home screen, app drawer, recents, share sheet |
+| A welcome card with their photo | Every launch, two seconds |
 | "For Bhaloo" dedication page | About screen, with a note in English and Hindi |
 | Your name as the author | About screen — set it in **Settings → Signature** |
 | Greets him by name, by the hour | *Good morning, Bhaloo* / *सुप्रभात, भालू!* |
@@ -17,7 +17,8 @@ in a few minutes each.
 | His name spoken in every reminder | Added automatically if you leave it out |
 | Quick picks phrased for him | Medicine, water, call home, sleep — both languages |
 | His own statistics | Times reminded, marked done, days you two have been doing this |
-| A hidden message | Tap his photo five times on the About screen |
+| A hidden message | Tap their photo five times on the About screen |
+| Their birthday, 31 July | Already in the list on first launch, wished in Hindi at midnight |
 | Special-day mode | A warm extra spoken line, and a cake on the card |
 | A chime that exists only here | `res/raw/bhaloo_chime.wav`, generated for this app |
 
@@ -33,10 +34,10 @@ Each of these is a small, contained edit:
    Same file → `dedication_body` and `dedication_body_hi`. Write what you would
    actually say to him.
 
-3. **Seed his birthday before you send the APK.**
-   Add it in the app as a **yearly** reminder with **Special day** on and a
-   Hindi message — `भालू, जन्मदिन मुबारक हो!` — then he finds it already
-   waiting for him on day one.
+3. **The birthday is already seeded.** ✅
+   31 July goes in on first launch as a yearly, special-day reminder that
+   wishes them in Hindi at midnight. Change the time or the words in
+   `data/BirthdaySeed.kt`, or just edit it inside the app.
 
 4. **Rename the app to whatever you actually call him.**
    `app_name` in `values/strings.xml` and `values-hi/strings.xml`. If you call

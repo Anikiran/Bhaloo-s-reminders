@@ -2,6 +2,9 @@
 #
 # Put Bhaloo's face on the app.
 #
+# Their photo is already installed — run this only to replace it with a
+# different one.
+#
 #   tools/set_bhaloo_photo.sh ~/Pictures/bhaloo.jpg
 #
 # It does two things:

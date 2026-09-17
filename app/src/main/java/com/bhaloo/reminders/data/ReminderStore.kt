@@ -37,6 +37,11 @@ class ReminderStore(context: Context) {
         set(value) = prefs.edit().putFloat(KEY_PITCH, value.coerceIn(0.5f, 1.6f)).apply()
 
     /** The name of whoever made this for Bhaloo — printed on the dedication card. */
+    /** Guards the one-time birthday seed so a deleted birthday stays deleted. */
+    var hasSeeded: Boolean
+        get() = prefs.getBoolean(KEY_SEEDED, false)
+        set(value) = prefs.edit().putBoolean(KEY_SEEDED, value).apply()
+
     var madeBy: String
         get() = prefs.getString(KEY_MADE_BY, "") ?: ""
         set(value) = prefs.edit().putString(KEY_MADE_BY, value.trim()).apply()
@@ -171,6 +176,7 @@ class ReminderStore(context: Context) {
         const val KEY_RATE = "speech_rate"
         const val KEY_PITCH = "speech_pitch"
         const val KEY_MADE_BY = "made_by"
+        const val KEY_SEEDED = "seeded_birthday"
         const val KEY_INSTALLED_AT = "installed_at"
     }
 }

@@ -17,7 +17,7 @@ no ads, no internet, no analytics. One app, one person.
 | 🗣️ **Your exact words** | Type the sentence you want said. "Bhaloo" is woven in automatically if you leave it out. Say it 1–5 times, at whatever speed and pitch sounds right. |
 | 🇮🇳 **English or Hindi** | Per reminder. Hindi messages are spoken in Devanagari — `भालू, दवाई लेने का समय हो गया है।` The whole app UI is translated too. |
 | 📅 **Calendar-aware** | Pick any date and time. Repeat once, daily, weekly, monthly, yearly, or on chosen weekdays (Mon/Wed/Fri…). Month-end dates clamp correctly; birthdays roll to next year. |
-| 🎂 **Special days** | Mark a reminder as a special day and it gets a warm extra line before the message, plus a cake on the card. |
+| 🎂 **Special days** | Mark a reminder as a special day and it gets a warm extra line before the message, plus a cake on the card. Bhaloo's birthday — 31 July — is already in the app. |
 | ⏰ **Full-screen alert** | When a reminder fires, a full-screen card appears over the lock screen with **Done / Snooze / Say it again**. |
 | 🔁 **Survives everything** | Reminders are re-armed after reboot, app update, time change and time-zone change. |
 | 🔒 **Entirely offline** | Everything is stored on the phone. The app requests no internet permission at all. |
@@ -27,7 +27,10 @@ no ads, no internet, no analytics. One app, one person.
 This is not a generic app with a name pasted on:
 
 - **Bhaloo's face is the app icon** and appears on the welcome card, the home
-  screen and every full-screen alert (`tools/set_bhaloo_photo.sh`).
+  screen and every full-screen alert.
+- **Their birthday is already in there.** On the very first launch the app
+  seeds 31 July as a yearly reminder that wishes them, in Hindi, at midnight —
+  so the list is never empty and the first thing in it is the date that matters.
 - **A dedication screen** — "For Bhaloo" — with a personal note in English and
   Hindi, signed with your name (set it in Settings → Signature).
 - **It greets him by name**, switching through the day and in both languages:
@@ -69,17 +72,33 @@ installs on any phone without you setting up a keystore. (That also means Play
 Store publishing would need a real signing key — this app was never meant for
 the Play Store.)
 
-## Putting Bhaloo's face on it
+## The birthday, and changing it
+
+31 July is seeded on first launch as a yearly, special-day reminder that speaks
+in Hindi at **midnight** — the classic *12 baje* wish. Everything about it is
+editable in the app (tap it on the home screen), and the defaults live in one
+file, `data/BirthdaySeed.kt`:
+
+- `BIRTHDAY` — the date.
+- `WISH_AT` — change `LocalTime.MIDNIGHT` to e.g. `LocalTime.of(8, 0)` for a
+  morning wish instead.
+- `WISH` — the exact words spoken.
+
+The seed runs once, guarded by a flag, so if Bhaloo deletes the birthday in the
+app it stays deleted.
+
+## Swapping the photo
+
+Their photo is already installed. To replace it later:
 
 ```bash
-tools/set_bhaloo_photo.sh ~/Pictures/bhaloo.jpg
+tools/set_bhaloo_photo.sh ~/Pictures/new-photo.jpg
 ./gradlew assembleRelease
 ```
 
-The script crops the photo square, replaces the placeholder bear on every
-screen, and rebuilds the launcher icon (adaptive + legacy densities) so the app
-on the home screen is literally him. Needs ImageMagick; if you would rather do
-it by hand, see the notes at the top of the script.
+The script crops the photo square, replaces it on every screen, and rebuilds the
+launcher icon (adaptive + legacy densities). Needs ImageMagick; if you would
+rather do it by hand, see the notes at the top of the script.
 
 ## First run, on his phone
 

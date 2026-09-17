@@ -17,6 +17,10 @@
     <string name="easter_egg_body">You found it. Ab toh yaad rakhna padega — someone actually built a whole app just so your day runs on time. Chai pee lo.</string>
     <string name="version_line">Bhaloo\'s Reminders · v1.0</string>
 
+    <!-- The birthday that ships with the app -->
+    <string name="seed_birthday_title">Bhaloo\'s Birthday</string>
+    <string name="seed_birthday_note">31 July. The one date this whole app was really built around.</string>
+
     <!-- Home -->
     <string name="new_reminder">New reminder</string>
     <string name="edit_reminder">Edit reminder</string>

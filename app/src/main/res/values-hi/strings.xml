@@ -12,6 +12,9 @@
     <string name="easter_egg_title">अरे भालू! 🐻</string>
     <string name="easter_egg_body">मिल गया! किसी ने तुम्हारे लिए पूरी ऐप बना डाली, सिर्फ़ इसलिए कि तुम्हारा दिन सही चले। चाय पी लो।</string>
 
+    <string name="seed_birthday_title">भालू का जन्मदिन</string>
+    <string name="seed_birthday_note">31 जुलाई। इसी दिन के लिए तो ये ऐप बनी है।</string>
+
     <string name="new_reminder">नया रिमाइंडर</string>
     <string name="edit_reminder">रिमाइंडर बदलें</string>
     <string name="settings">सेटिंग्स</string>
