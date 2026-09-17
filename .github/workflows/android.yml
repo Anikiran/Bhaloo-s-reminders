@@ -62,6 +62,21 @@ jobs:
           path: out/*.apk
           if-no-files-found: error
 
+      # The APK filename carries its version, so without this the release would
+      # accumulate one file per build and "which one do I download?" would be
+      # ambiguous again — the exact trap this release is meant to remove.
+      - name: Drop older APKs from the latest release
+        if: github.ref_name == 'claude/bhaloo-reminder-android-app-j6tb31'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ids=$(gh api "repos/${{ github.repository }}/releases/tags/latest" \
+                  --jq '.assets[].id' 2>/dev/null || true)
+          for id in $ids; do
+            echo "Removing stale asset $id"
+            gh api -X DELETE "repos/${{ github.repository }}/releases/assets/$id" || true
+          done
+
       # One permanent link that always points at the newest build, so there is
       # never a question of which artifact to download:
       #   https://github.com/Anikiran/Bhaloo-s-reminders/releases/latest
