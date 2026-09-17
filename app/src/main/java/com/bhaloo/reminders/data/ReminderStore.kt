@@ -37,6 +37,17 @@ class ReminderStore(context: Context) {
         set(value) = prefs.edit().putFloat(KEY_PITCH, value.coerceIn(0.5f, 1.6f)).apply()
 
     /** The name of whoever made this for Bhaloo — printed on the dedication card. */
+    /**
+     * How an English voice should spell the name so it says "Bhaa-loo" and not
+     * "Balu". Tunable because the right answer depends on the phone's engine.
+     */
+    var spokenNameEnglish: String
+        get() = prefs.getString(KEY_SPOKEN_NAME, NameVoice.DEFAULT_SPOKEN_EN)
+            ?: NameVoice.DEFAULT_SPOKEN_EN
+        set(value) = prefs.edit()
+            .putString(KEY_SPOKEN_NAME, value.trim().ifBlank { NameVoice.DEFAULT_SPOKEN_EN })
+            .apply()
+
     /** Guards the one-time birthday seed so a deleted birthday stays deleted. */
     var hasSeeded: Boolean
         get() = prefs.getBoolean(KEY_SEEDED, false)
@@ -177,6 +188,7 @@ class ReminderStore(context: Context) {
         const val KEY_PITCH = "speech_pitch"
         const val KEY_MADE_BY = "made_by"
         const val KEY_SEEDED = "seeded_birthday"
+        const val KEY_SPOKEN_NAME = "spoken_name_en"
         const val KEY_INSTALLED_AT = "installed_at"
     }
 }

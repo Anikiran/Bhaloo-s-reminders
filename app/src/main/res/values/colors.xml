@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">#FFF2D3A7</color>
-    <color name="bhaloo_honey">#FFF2A413</color>
-    <color name="bhaloo_cocoa">#FF5A3921</color>
-    <color name="bhaloo_cream">#FFFFF8EE</color>
+    <color name="glass_backdrop">#FFEFE7DC</color>
+    <!-- Lavender behind the photo, picking up the icon's place in the palette. -->
+    <color name="ic_launcher_background">#FFE7DFF4</color>
+    <color name="glass_violet">#FF8B5CF6</color>
+    <color name="glass_mint">#FF3ED6C4</color>
 </resources>

@@ -14,6 +14,7 @@ import android.os.PowerManager
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import com.bhaloo.reminders.BhalooApp
+import com.bhaloo.reminders.data.NameVoice
 import com.bhaloo.reminders.data.VoiceLanguage
 import com.bhaloo.reminders.notify.Notifications
 
@@ -159,8 +160,15 @@ class SpeakerService : Service() {
         spoken = lines.size
     }
 
-    /** A special day gets a warm opening line before the reminder itself. */
+    /**
+     * A special day gets a warm opening line before the reminder itself.
+     *
+     * Every line goes through [NameVoice] on the way out, so an English voice
+     * is handed a spelling it pronounces as "Bhaa-loo" rather than "Balu".
+     */
     private fun buildLines(request: Request): List<String> {
+        val spelling = (applicationContext as? BhalooApp)?.store?.spokenNameEnglish
+            ?: NameVoice.DEFAULT_SPOKEN_EN
         val lines = mutableListOf<String>()
         if (request.special) {
             lines += when (request.language) {
@@ -169,7 +177,7 @@ class SpeakerService : Service() {
             }
         }
         repeat(request.times) { lines += request.text }
-        return lines
+        return lines.map { NameVoice.forSpeech(it, request.language, spelling) }
     }
 
     /** If the alarm stream is muted the message would be silent — nudge it up a little. */

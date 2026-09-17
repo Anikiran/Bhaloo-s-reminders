@@ -15,56 +15,60 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 
-/** Warm honey-and-cocoa palette — a bear's colours. */
-private val Honey = Color(0xFFF2A413)
-private val HoneyDark = Color(0xFFC77F05)
-private val Cocoa = Color(0xFF5A3921)
-private val CocoaLight = Color(0xFF8B5E3C)
-private val Cream = Color(0xFFFFF8EE)
-private val Berry = Color(0xFFB3261E)
-
+/**
+ * Colours come from [Glass]; this scheme exists so the few Material widgets
+ * left in the app (text selection handles, the date and time pickers) land in
+ * the same palette as everything hand-built.
+ */
 private val LightColors = lightColorScheme(
-    primary = HoneyDark,
+    primary = Glass.Violet,
     onPrimary = Color.White,
-    primaryContainer = Color(0xFFFFDDA6),
-    onPrimaryContainer = Color(0xFF2B1700),
-    secondary = Cocoa,
+    primaryContainer = Glass.Lavender,
+    onPrimaryContainer = Glass.Ink,
+    secondary = Glass.MintDeep,
     onSecondary = Color.White,
-    secondaryContainer = Color(0xFFF3DFCC),
-    onSecondaryContainer = Color(0xFF2B1700),
-    tertiary = Color(0xFF4A6543),
-    background = Cream,
-    onBackground = Color(0xFF211A13),
-    surface = Cream,
-    onSurface = Color(0xFF211A13),
-    surfaceVariant = Color(0xFFF1E0CE),
-    onSurfaceVariant = Color(0xFF51443A),
-    error = Berry
+    secondaryContainer = Glass.Aqua,
+    onSecondaryContainer = Glass.Ink,
+    tertiary = Glass.Pink,
+    onTertiary = Glass.Ink,
+    background = Glass.Sand,
+    onBackground = Glass.Ink,
+    surface = Color.White.copy(alpha = 0.86f),
+    onSurface = Glass.Ink,
+    surfaceVariant = Color.White.copy(alpha = 0.64f),
+    onSurfaceVariant = Glass.InkSoft,
+    outline = Color.White.copy(alpha = 0.7f),
+    error = Glass.Danger,
+    onError = Color.White
 )
 
 private val DarkColors = darkColorScheme(
-    primary = Honey,
-    onPrimary = Color(0xFF412D00),
-    primaryContainer = Color(0xFF5E4200),
-    onPrimaryContainer = Color(0xFFFFDDA6),
-    secondary = CocoaLight,
-    onSecondary = Color(0xFF2B1700),
-    secondaryContainer = Color(0xFF4A3524),
-    onSecondaryContainer = Color(0xFFF3DFCC),
-    tertiary = Color(0xFFB0CCA6),
-    background = Color(0xFF191210),
-    onBackground = Color(0xFFEDE0D4),
-    surface = Color(0xFF191210),
-    onSurface = Color(0xFFEDE0D4),
-    surfaceVariant = Color(0xFF51443A),
-    onSurfaceVariant = Color(0xFFD5C3B5),
-    error = Color(0xFFFFB4AB)
+    primary = Glass.VioletBright,
+    onPrimary = Color(0xFF1B1030),
+    primaryContainer = Glass.VioletDeep,
+    onPrimaryContainer = Glass.InkOnDark,
+    secondary = Glass.MintBright,
+    onSecondary = Color(0xFF04322D),
+    secondaryContainer = Glass.MintDeep,
+    onSecondaryContainer = Glass.InkOnDark,
+    tertiary = Glass.Pink,
+    onTertiary = Color(0xFF3A1128),
+    background = Glass.NightBase,
+    onBackground = Glass.InkOnDark,
+    surface = Color(0xFF2B2635),
+    onSurface = Glass.InkOnDark,
+    surfaceVariant = Color(0xFF342E40),
+    onSurfaceVariant = Glass.InkSoftOnDark,
+    outline = Color.White.copy(alpha = 0.28f),
+    error = Color(0xFFFFB4AB),
+    onError = Color(0xFF3A0A0C)
 )
 
-private val BhalooTypography = Typography(
+private val GlassTypography = Typography(
     displaySmall = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Bold),
     headlineSmall = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.SemiBold),
-    titleLarge = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.SemiBold),
+    titleLarge = TextStyle(fontSize = 19.sp, fontWeight = FontWeight.SemiBold),
+    titleMedium = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.SemiBold),
     bodyLarge = TextStyle(fontSize = 16.sp),
     bodyMedium = TextStyle(fontSize = 14.sp),
     labelLarge = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Medium)
@@ -80,12 +84,16 @@ fun BhalooTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as? Activity)?.window ?: return@SideEffect
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            val controller = WindowCompat.getInsetsController(window, view)
+            // The backdrop is pale in light mode and deep in dark mode, so the
+            // status-bar icons have to flip with it.
+            controller.isAppearanceLightStatusBars = !darkTheme
+            controller.isAppearanceLightNavigationBars = !darkTheme
         }
     }
     MaterialTheme(
         colorScheme = colors,
-        typography = BhalooTypography,
+        typography = GlassTypography,
         content = content
     )
 }

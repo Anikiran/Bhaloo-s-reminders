@@ -5,18 +5,23 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bhaloo.reminders.ui.screens.AboutScreen
@@ -25,6 +30,7 @@ import com.bhaloo.reminders.ui.screens.HomeScreen
 import com.bhaloo.reminders.ui.screens.SettingsScreen
 import com.bhaloo.reminders.ui.screens.WelcomeScreen
 import com.bhaloo.reminders.ui.theme.BhalooTheme
+import com.bhaloo.reminders.ui.theme.MeshBackground
 
 class MainActivity : ComponentActivity() {
 
@@ -37,7 +43,12 @@ class MainActivity : ComponentActivity() {
         askForNotificationPermission()
         setContent {
             BhalooTheme {
-                BhalooNavigation()
+                Box(Modifier.fillMaxSize()) {
+                    // One backdrop for the whole app, behind every screen, so the
+                    // glass never changes what it is looking at as you navigate.
+                    MeshBackground()
+                    BhalooNavigation()
+                }
             }
         }
     }
@@ -63,36 +74,52 @@ sealed interface Screen {
 @Composable
 private fun BhalooNavigation() {
     val viewModel: ReminderViewModel = viewModel()
-    var screen by remember { mutableStateOf<Screen>(Screen.Home) }
+
+    // A real back stack. Previously this was a single "current screen" value,
+    // so the system back button had nothing to pop and closed the app from
+    // wherever you happened to be.
+    val stack = remember { mutableStateListOf<Screen>(Screen.Home) }
+    val current = stack.last()
+
+    fun go(screen: Screen) = stack.add(screen)
+    fun back() {
+        if (stack.size > 1) stack.removeAt(stack.lastIndex)
+    }
+
     var showWelcome by rememberSaveable { mutableStateOf(true) }
 
-    when (val current = screen) {
+    // Back closes the welcome card first, then walks the stack, and only exits
+    // the app once there is nothing left to go back to.
+    BackHandler(enabled = showWelcome) { showWelcome = false }
+    BackHandler(enabled = !showWelcome && stack.size > 1) { back() }
+
+    when (current) {
         is Screen.Home -> HomeScreen(
             viewModel = viewModel,
-            onAdd = { screen = Screen.Editor(null) },
-            onEdit = { screen = Screen.Editor(it.id) },
-            onAbout = { screen = Screen.About },
-            onSettings = { screen = Screen.Settings }
+            onAdd = { go(Screen.Editor(null)) },
+            onEdit = { go(Screen.Editor(it.id)) },
+            onAbout = { go(Screen.About) },
+            onSettings = { go(Screen.Settings) }
         )
 
         is Screen.Editor -> EditorScreen(
             viewModel = viewModel,
             reminderId = current.reminderId,
-            onClose = { screen = Screen.Home }
+            onClose = { back() }
         )
 
         is Screen.About -> AboutScreen(
             viewModel = viewModel,
-            onClose = { screen = Screen.Home }
+            onClose = { back() }
         )
 
         is Screen.Settings -> SettingsScreen(
             viewModel = viewModel,
-            onClose = { screen = Screen.Home }
+            onClose = { back() }
         )
     }
 
-    // A two-second dedication card on launch. It is, after all, the whole point.
+    // A moment of dedication on launch. It is, after all, the whole point.
     AnimatedVisibility(
         visible = showWelcome,
         enter = fadeIn(),

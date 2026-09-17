@@ -16,10 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +34,16 @@ import com.bhaloo.reminders.data.Reminder
 import com.bhaloo.reminders.notify.Notifications
 import com.bhaloo.reminders.speech.SpeakerService
 import com.bhaloo.reminders.ui.theme.BhalooTheme
+import com.bhaloo.reminders.ui.theme.Glass
+import com.bhaloo.reminders.ui.theme.GlassButton
+import com.bhaloo.reminders.ui.theme.GlassOutlineButton
+import com.bhaloo.reminders.ui.theme.GlassPane
+import com.bhaloo.reminders.ui.theme.MeshBackground
+import com.bhaloo.reminders.ui.theme.glassInk
+import com.bhaloo.reminders.ui.theme.glassInkSoft
+import androidx.compose.foundation.border
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.text.font.FontWeight
 import com.bhaloo.reminders.util.BhalooWords
 
 /**
@@ -136,88 +143,119 @@ private fun AlertContent(
     onRepeat: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.primaryContainer
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Image(
-                painter = painterResource(R.drawable.bhaloo_portrait),
-                contentDescription = stringResource(R.string.bhaloo_photo_desc),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(112.dp)
-                    .clip(CircleShape)
-            )
-            Spacer(Modifier.height(20.dp))
+    Box(modifier = Modifier.fillMaxSize()) {
+        MeshBackground()
 
-            if (reminder == null) {
-                Text(
-                    stringResource(R.string.alert_missing),
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Center
+        GlassPane(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(horizontal = 22.dp)
+                .fillMaxWidth(),
+            elevation = 30.dp,
+            tint = if (reminder?.isSpecialDay == true) Glass.heroFill else null,
+            iridescent = true
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.bhaloo_portrait),
+                    contentDescription = stringResource(R.string.bhaloo_photo_desc),
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(112.dp)
+                        .shadow(22.dp, CircleShape, clip = false, spotColor = Glass.shadowViolet)
+                        .clip(CircleShape)
+                        .border(3.dp, Glass.iridescentRim, CircleShape)
                 )
                 Spacer(Modifier.height(20.dp))
-                Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth()) {
-                    Text(stringResource(R.string.action_close))
+
+                if (reminder == null) {
+                    Text(
+                        stringResource(R.string.alert_missing),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = glassInk(),
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(Modifier.height(20.dp))
+                    GlassButton(onClick = onDismiss, modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            stringResource(R.string.action_close),
+                            color = androidx.compose.ui.graphics.Color.White,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                    return@Column
                 }
-                return@Column
-            }
 
-            Text(
-                text = if (reminder.isSpecialDay) "🎂 " + reminder.title else reminder.title,
-                style = MaterialTheme.typography.displaySmall,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-            Spacer(Modifier.height(10.dp))
-            Text(
-                text = reminder.speechText(),
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-            Spacer(Modifier.height(6.dp))
-            Text(
-                text = BhalooWords.whenLabel(reminder.dateTime),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-            if (reminder.note.isNotBlank()) {
-                Spacer(Modifier.height(10.dp))
                 Text(
-                    text = reminder.note,
-                    style = MaterialTheme.typography.bodyMedium,
+                    text = if (reminder.isSpecialDay) "\uD83C\uDF82 " + reminder.title else reminder.title,
+                    style = MaterialTheme.typography.displaySmall,
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = glassInk()
                 )
-            }
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    text = reminder.speechText(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center,
+                    color = glassInk()
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = BhalooWords.whenLabel(reminder.dateTime),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = glassInkSoft()
+                )
+                if (reminder.note.isNotBlank()) {
+                    Spacer(Modifier.height(10.dp))
+                    Text(
+                        text = reminder.note,
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center,
+                        color = glassInkSoft()
+                    )
+                }
 
-            Spacer(Modifier.height(32.dp))
-            Button(
-                onClick = onDone,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp)
-            ) { Text(stringResource(R.string.action_done)) }
-            Spacer(Modifier.height(10.dp))
-            OutlinedButton(
-                onClick = onSnooze,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp)
-            ) { Text(stringResource(R.string.action_snooze)) }
-            Spacer(Modifier.height(10.dp))
-            OutlinedButton(
-                onClick = onRepeat,
-                modifier = Modifier.fillMaxWidth()
-            ) { Text(stringResource(R.string.action_repeat)) }
+                Spacer(Modifier.height(30.dp))
+                GlassButton(
+                    onClick = onDone,
+                    modifier = Modifier.fillMaxWidth(),
+                    height = 56.dp
+                ) {
+                    Text(
+                        stringResource(R.string.action_done),
+                        color = androidx.compose.ui.graphics.Color.White,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+                Spacer(Modifier.height(10.dp))
+                GlassButton(
+                    onClick = onSnooze,
+                    modifier = Modifier.fillMaxWidth(),
+                    fill = Glass.secondaryFill,
+                    glowColor = Glass.shadowMint,
+                    height = 56.dp
+                ) {
+                    Text(
+                        stringResource(R.string.action_snooze),
+                        color = androidx.compose.ui.graphics.Color.White,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+                Spacer(Modifier.height(10.dp))
+                GlassOutlineButton(
+                    onClick = onRepeat,
+                    modifier = Modifier.fillMaxWidth(),
+                    height = 50.dp
+                ) {
+                    Text(stringResource(R.string.action_repeat), color = glassInk())
+                }
+            }
         }
     }
 }

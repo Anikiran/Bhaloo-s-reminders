@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- windowBackground matches the top-left of the mesh backdrop, so the
+         launch window blends into the app instead of flashing a different colour. -->
     <style name="Theme.BhalooReminders" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:windowBackground">@color/bhaloo_cream</item>
+        <item name="android:windowBackground">@color/glass_backdrop</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus">false</item>

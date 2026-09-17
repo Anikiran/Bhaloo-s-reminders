@@ -82,6 +82,10 @@
     <string name="toast_done">शाबाश भालू!</string>
     <string name="toast_snoozed">ठीक है — %1$d मिनट बाद फिर बताऊँगा।</string>
 
+    <string name="settings_name">नाम का उच्चारण</string>
+    <string name="settings_name_help">अंग्रेज़ी आवाज़ में “भ” की ध्वनि नहीं होती, इसलिए “Bhaloo” को “बालू” बोल देती है। नीचे से कोई हिज्जे चुनो और सुनकर देखो। हिंदी पर इसका असर नहीं पड़ता।</string>
+    <string name="settings_name_hear">नाम सुनो</string>
+
     <string name="settings_voice">आवाज़</string>
     <string name="settings_rate">रफ़्तार: %1$s</string>
     <string name="settings_pitch">पिच: %1$s</string>

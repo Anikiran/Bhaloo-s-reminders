@@ -15,7 +15,7 @@
     <string name="easter_egg_hint">Tap Bhaloo\'s photo a few times…</string>
     <string name="easter_egg_title">Arre Bhaloo! 🐻</string>
     <string name="easter_egg_body">You found it. Ab toh yaad rakhna padega — someone actually built a whole app just so your day runs on time. Chai pee lo.</string>
-    <string name="version_line">Bhaloo\'s Reminders · v1.1</string>
+    <string name="version_line">Bhaloo\'s Reminders · v1.2</string>
 
     <!-- The birthday that ships with the app -->
     <string name="seed_birthday_title">Bhaloo\'s Birthday</string>
@@ -96,6 +96,11 @@
     <string name="toast_snoozed">Okay — back in %1$d minutes.</string>
 
     <!-- Settings -->
+    <string name="settings_name">Saying the name</string>
+    <string name="settings_name_help">English voices have no aspirated “bh”, so spelling it “Bhaloo” comes out as “Balu”. Pick or type a spelling that sounds right, and tap to hear it. Hindi is unaffected.</string>
+    <string name="settings_name_test">%1$s, this is how your name will sound.</string>
+    <string name="settings_name_hear">Hear the name</string>
+
     <string name="settings_voice">Voice</string>
     <string name="settings_rate">Speed: %1$s</string>
     <string name="settings_pitch">Pitch: %1$s</string>

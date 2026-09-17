@@ -2,12 +2,14 @@ package com.bhaloo.reminders.ui.screens
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -16,26 +18,16 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Switch
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
@@ -45,7 +37,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.bhaloo.reminders.R
 import com.bhaloo.reminders.alarm.ReminderScheduler
@@ -55,6 +49,17 @@ import com.bhaloo.reminders.data.RepeatMode
 import com.bhaloo.reminders.data.VoiceLanguage
 import com.bhaloo.reminders.data.dayOfWeekValues
 import com.bhaloo.reminders.ui.ReminderViewModel
+import com.bhaloo.reminders.ui.theme.Glass
+import com.bhaloo.reminders.ui.theme.GlassButton
+import com.bhaloo.reminders.ui.theme.GlassChip
+import com.bhaloo.reminders.ui.theme.GlassCircleButton
+import com.bhaloo.reminders.ui.theme.GlassField
+import com.bhaloo.reminders.ui.theme.GlassOutlineButton
+import com.bhaloo.reminders.ui.theme.GlassPane
+import com.bhaloo.reminders.ui.theme.GlassShapeMedium
+import com.bhaloo.reminders.ui.theme.GlassToggleRow
+import com.bhaloo.reminders.ui.theme.glassInk
+import com.bhaloo.reminders.ui.theme.glassInkSoft
 import com.bhaloo.reminders.util.BhalooWords
 import java.time.Instant
 import java.time.LocalDate
@@ -91,277 +96,316 @@ fun EditorScreen(
     var showDeleteConfirm by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<Int?>(null) }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        stringResource(
-                            if (existing == null) R.string.new_reminder else R.string.edit_reminder
-                        )
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onClose) {
-                        Icon(Icons.Filled.ArrowBack, stringResource(R.string.back))
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            GlassTopBar(
+                title = stringResource(
+                    if (existing == null) R.string.new_reminder else R.string.edit_reminder
+                ),
+                navigation = {
+                    GlassCircleButton(onClick = onClose, diameter = 42.dp) {
+                        Icon(Icons.Filled.ArrowBack, stringResource(R.string.back), tint = glassInk())
                     }
                 },
                 actions = {
                     if (existing != null) {
-                        IconButton(onClick = { showDeleteConfirm = true }) {
-                            Icon(Icons.Filled.Delete, stringResource(R.string.delete))
+                        GlassCircleButton(
+                            onClick = { showDeleteConfirm = true },
+                            diameter = 42.dp
+                        ) {
+                            Icon(
+                                Icons.Filled.Delete,
+                                stringResource(R.string.delete),
+                                tint = Glass.Danger
+                            )
                         }
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            )
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
-            OutlinedTextField(
-                value = title,
-                onValueChange = { title = it },
-                label = { Text(stringResource(R.string.field_title)) },
-                placeholder = { Text(stringResource(R.string.field_title_hint)) },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                }
             )
 
-            SectionCard(title = stringResource(R.string.section_voice)) {
-                OutlinedTextField(
-                    value = message,
-                    onValueChange = { message = it },
-                    label = { Text(stringResource(R.string.field_message)) },
-                    placeholder = { Text(BhalooWords.sampleMessage(language)) },
-                    minLines = 2,
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 130.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                GlassField(
+                    value = title,
+                    onValueChange = { title = it },
+                    label = stringResource(R.string.field_title),
+                    placeholder = stringResource(R.string.field_title_hint),
                     modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    stringResource(R.string.field_message_help),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Spacer(Modifier.height(10.dp))
 
-                ChipRow {
-                    VoiceLanguage.entries.forEach { option ->
-                        FilterChip(
-                            selected = language == option,
-                            onClick = { language = option },
-                            label = {
-                                Text(
-                                    when (option) {
+                GlassSection(stringResource(R.string.section_voice)) {
+                    Column {
+                        GlassField(
+                            value = message,
+                            onValueChange = { message = it },
+                            placeholder = BhalooWords.sampleMessage(language),
+                            singleLine = false,
+                            shape = GlassShapeMedium,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            stringResource(R.string.field_message_help),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = glassInkSoft()
+                        )
+
+                        Spacer(Modifier.height(14.dp))
+                        ChipRow {
+                            VoiceLanguage.entries.forEach { option ->
+                                GlassChip(
+                                    selected = language == option,
+                                    onClick = { language = option },
+                                    label = when (option) {
                                         VoiceLanguage.ENGLISH -> stringResource(R.string.lang_english)
                                         VoiceLanguage.HINDI -> stringResource(R.string.lang_hindi)
+                                    },
+                                    fill = if (option == VoiceLanguage.HINDI) {
+                                        Glass.secondaryFill
+                                    } else {
+                                        Glass.primaryFill
+                                    },
+                                    glowColor = if (option == VoiceLanguage.HINDI) {
+                                        Glass.shadowMint
+                                    } else {
+                                        Glass.shadowViolet
                                     }
                                 )
                             }
+                        }
+
+                        Spacer(Modifier.height(14.dp))
+                        Text(
+                            stringResource(R.string.field_quick_picks),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = glassInkSoft()
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        ChipRow {
+                            quickPicks(language).forEach { pick ->
+                                GlassChip(
+                                    selected = false,
+                                    onClick = {
+                                        if (title.isBlank()) title = pick.title
+                                        message = pick.message
+                                    },
+                                    label = pick.title
+                                )
+                            }
+                        }
+
+                        Spacer(Modifier.height(16.dp))
+                        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            GlassButton(
+                                onClick = {
+                                    val preview = Reminder(
+                                        id = 0L,
+                                        title = title,
+                                        spokenMessage = message,
+                                        language = language,
+                                        timeMillis = System.currentTimeMillis()
+                                    ).speechText()
+                                    viewModel.preview(preview, language, special)
+                                },
+                                modifier = Modifier.weight(1f),
+                                height = 48.dp
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(Icons.Filled.PlayArrow, null, tint = Color.White)
+                                    Spacer(Modifier.height(0.dp))
+                                    Text(
+                                        " " + stringResource(R.string.action_hear_it),
+                                        color = Color.White,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
+                            }
+                            GlassOutlineButton(
+                                onClick = { viewModel.stopPreview() },
+                                modifier = Modifier.weight(1f),
+                                height = 48.dp
+                            ) {
+                                Text(stringResource(R.string.action_stop), color = glassInk())
+                            }
+                        }
+
+                        Spacer(Modifier.height(16.dp))
+                        Text(
+                            stringResource(R.string.field_speak_times, speakTimes),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = glassInkSoft()
+                        )
+                        GlassSlider(
+                            value = speakTimes.toFloat(),
+                            onValueChange = { speakTimes = it.toInt().coerceIn(1, 5) },
+                            valueRange = 1f..5f,
+                            steps = 3
                         )
                     }
                 }
 
-                Spacer(Modifier.height(10.dp))
-                Text(stringResource(R.string.field_quick_picks), style = MaterialTheme.typography.labelLarge)
-                Spacer(Modifier.height(6.dp))
-                ChipRow {
-                    quickPicks(language).forEach { pick ->
-                        FilterChip(
-                            selected = false,
-                            onClick = {
-                                if (title.isBlank()) title = pick.title
-                                message = pick.message
-                            },
-                            label = { Text(pick.title) }
+                GlassSection(stringResource(R.string.section_when)) {
+                    Column {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            GlassOutlineButton(
+                                onClick = { showDatePicker = true },
+                                modifier = Modifier.weight(1f),
+                                height = 50.dp
+                            ) {
+                                Text(
+                                    BhalooWords.formatDate(LocalDateTime.of(date, time)),
+                                    color = glassInk()
+                                )
+                            }
+                            GlassOutlineButton(
+                                onClick = { showTimePicker = true },
+                                modifier = Modifier.weight(1f),
+                                height = 50.dp
+                            ) {
+                                Text(
+                                    BhalooWords.formatTime(LocalDateTime.of(date, time)),
+                                    color = glassInk(),
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                        }
+
+                        Spacer(Modifier.height(14.dp))
+                        Text(
+                            stringResource(R.string.field_repeat),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = glassInkSoft()
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        ChipRow {
+                            RepeatMode.entries.forEach { option ->
+                                GlassChip(
+                                    selected = repeat == option,
+                                    onClick = { repeat = option },
+                                    label = repeatName(option)
+                                )
+                            }
+                        }
+
+                        if (repeat == RepeatMode.CUSTOM_DAYS) {
+                            Spacer(Modifier.height(10.dp))
+                            ChipRow {
+                                dayOfWeekValues().forEach { day ->
+                                    GlassChip(
+                                        selected = days.contains(day),
+                                        onClick = {
+                                            days = if (days.contains(day)) days - day else days + day
+                                        },
+                                        label = ReminderScheduler.dayLabel(day),
+                                        fill = Glass.secondaryFill,
+                                        glowColor = Glass.shadowMint
+                                    )
+                                }
+                            }
+                        }
+
+                        Spacer(Modifier.height(14.dp))
+                        Text(
+                            text = previewSchedule(date, time, repeat, days),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = glassInkSoft()
                         )
                     }
                 }
 
-                Spacer(Modifier.height(12.dp))
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Button(
-                        onClick = {
-                            val preview = Reminder(
-                                id = 0L,
-                                title = title,
+                GlassSection(stringResource(R.string.section_how)) {
+                    Column {
+                        ChipRow {
+                            AlertStyle.entries.forEach { option ->
+                                GlassChip(
+                                    selected = alertStyle == option,
+                                    onClick = { alertStyle = option },
+                                    label = alertStyleName(option)
+                                )
+                            }
+                        }
+                        Spacer(Modifier.height(10.dp))
+                        GlassToggleRow(
+                            label = stringResource(R.string.field_vibrate),
+                            checked = vibrate,
+                            onCheckedChange = { vibrate = it }
+                        )
+                        GlassToggleRow(
+                            label = stringResource(R.string.field_special),
+                            supporting = stringResource(R.string.field_special_help),
+                            checked = special,
+                            onCheckedChange = { special = it }
+                        )
+                        Spacer(Modifier.height(10.dp))
+                        GlassField(
+                            value = note,
+                            onValueChange = { note = it },
+                            placeholder = stringResource(R.string.field_note),
+                            shape = GlassShapeMedium,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+
+                error?.let {
+                    Text(
+                        stringResource(it),
+                        color = Glass.Danger,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+        }
+
+        GlassButton(
+            onClick = {
+                when {
+                    title.isBlank() && message.isBlank() -> error = R.string.error_no_title
+                    repeat == RepeatMode.CUSTOM_DAYS && days.isEmpty() -> error = R.string.error_no_days
+                    else -> {
+                        val millis = LocalDateTime.of(date, time)
+                            .atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+                        viewModel.save(
+                            (existing ?: Reminder(id = 0L, title = "", timeMillis = millis)).copy(
+                                title = title.ifBlank { message.take(40) },
                                 spokenMessage = message,
                                 language = language,
-                                timeMillis = System.currentTimeMillis()
-                            ).speechText()
-                            viewModel.preview(preview, language, special)
-                        }
-                    ) {
-                        Icon(Icons.Filled.PlayArrow, null)
-                        Spacer(Modifier.height(0.dp))
-                        Text(" " + stringResource(R.string.action_hear_it))
-                    }
-                    OutlinedButton(onClick = { viewModel.stopPreview() }) {
-                        Text(stringResource(R.string.action_stop))
-                    }
-                }
-
-                Spacer(Modifier.height(12.dp))
-                Text(
-                    stringResource(R.string.field_speak_times, speakTimes),
-                    style = MaterialTheme.typography.labelLarge
-                )
-                Slider(
-                    value = speakTimes.toFloat(),
-                    onValueChange = { speakTimes = it.toInt().coerceIn(1, 5) },
-                    valueRange = 1f..5f,
-                    steps = 3
-                )
-            }
-
-            SectionCard(title = stringResource(R.string.section_when)) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    OutlinedButton(
-                        onClick = { showDatePicker = true },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(BhalooWords.formatDate(LocalDateTime.of(date, time)))
-                    }
-                    OutlinedButton(
-                        onClick = { showTimePicker = true },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(BhalooWords.formatTime(LocalDateTime.of(date, time)))
-                    }
-                }
-
-                Spacer(Modifier.height(12.dp))
-                Text(stringResource(R.string.field_repeat), style = MaterialTheme.typography.labelLarge)
-                Spacer(Modifier.height(6.dp))
-                ChipRow {
-                    RepeatMode.entries.forEach { option ->
-                        FilterChip(
-                            selected = repeat == option,
-                            onClick = { repeat = option },
-                            label = { Text(repeatName(option)) }
-                        )
-                    }
-                }
-
-                if (repeat == RepeatMode.CUSTOM_DAYS) {
-                    Spacer(Modifier.height(10.dp))
-                    ChipRow {
-                        dayOfWeekValues().forEach { day ->
-                            FilterChip(
-                                selected = days.contains(day),
-                                onClick = {
-                                    days = if (days.contains(day)) days - day else days + day
-                                },
-                                label = { Text(ReminderScheduler.dayLabel(day)) }
+                                timeMillis = millis,
+                                repeat = repeat,
+                                daysOfWeek = days,
+                                enabled = true,
+                                speakTimes = speakTimes,
+                                alertStyle = alertStyle,
+                                vibrate = vibrate,
+                                isSpecialDay = special,
+                                note = note
                             )
-                        }
-                    }
-                }
-
-                Spacer(Modifier.height(10.dp))
-                Text(
-                    text = previewSchedule(
-                        date = date,
-                        time = time,
-                        repeat = repeat,
-                        days = days
-                    ),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-            SectionCard(title = stringResource(R.string.section_how)) {
-                ChipRow {
-                    AlertStyle.entries.forEach { option ->
-                        FilterChip(
-                            selected = alertStyle == option,
-                            onClick = { alertStyle = option },
-                            label = { Text(alertStyleName(option)) }
                         )
+                        onClose()
                     }
                 }
-                Spacer(Modifier.height(8.dp))
-                ToggleRow(
-                    label = stringResource(R.string.field_vibrate),
-                    checked = vibrate,
-                    onCheckedChange = { vibrate = it }
-                )
-                ToggleRow(
-                    label = stringResource(R.string.field_special),
-                    supporting = stringResource(R.string.field_special_help),
-                    checked = special,
-                    onCheckedChange = { special = it }
-                )
-                Spacer(Modifier.height(8.dp))
-                OutlinedTextField(
-                    value = note,
-                    onValueChange = { note = it },
-                    label = { Text(stringResource(R.string.field_note)) },
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-
-            error?.let {
-                Text(
-                    stringResource(it),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-            Button(
-                onClick = {
-                    when {
-                        title.isBlank() && message.isBlank() -> error = R.string.error_no_title
-                        repeat == RepeatMode.CUSTOM_DAYS && days.isEmpty() ->
-                            error = R.string.error_no_days
-
-                        else -> {
-                            val millis = LocalDateTime.of(date, time)
-                                .atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-                            viewModel.save(
-                                (existing ?: Reminder(id = 0L, title = "", timeMillis = millis)).copy(
-                                    title = title.ifBlank { message.take(40) },
-                                    spokenMessage = message,
-                                    language = language,
-                                    timeMillis = millis,
-                                    repeat = repeat,
-                                    daysOfWeek = days,
-                                    enabled = true,
-                                    speakTimes = speakTimes,
-                                    alertStyle = alertStyle,
-                                    vibrate = vibrate,
-                                    isSpecialDay = special,
-                                    note = note
-                                )
-                            )
-                            onClose()
-                        }
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(52.dp)
-            ) {
-                Text(stringResource(R.string.action_save))
-            }
-            Spacer(Modifier.height(24.dp))
+            },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .navigationBarsPadding()
+                .padding(horizontal = 26.dp, vertical = 20.dp)
+                .fillMaxWidth(),
+            height = 58.dp
+        ) {
+            Text(
+                stringResource(R.string.action_save),
+                color = Color.White,
+                fontWeight = FontWeight.SemiBold
+            )
         }
     }
 
@@ -430,7 +474,7 @@ fun EditorScreen(
                     viewModel.delete(existing.id)
                     showDeleteConfirm = false
                     onClose()
-                }) { Text(stringResource(R.string.delete)) }
+                }) { Text(stringResource(R.string.delete), color = Glass.Danger) }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteConfirm = false }) {
@@ -441,20 +485,27 @@ fun EditorScreen(
     }
 }
 
+/** Slider tinted to the palette, since Material's default green is jarring here. */
 @Composable
-private fun SectionCard(title: String, content: @Composable () -> Unit) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+private fun GlassSlider(
+    value: Float,
+    onValueChange: (Float) -> Unit,
+    valueRange: ClosedFloatingPointRange<Float>,
+    steps: Int = 0
+) {
+    Slider(
+        value = value,
+        onValueChange = onValueChange,
+        valueRange = valueRange,
+        steps = steps,
+        colors = SliderDefaults.colors(
+            thumbColor = Color.White,
+            activeTrackColor = Glass.Violet,
+            inactiveTrackColor = Color.White.copy(alpha = 0.45f),
+            activeTickColor = Color.White.copy(alpha = 0.8f),
+            inactiveTickColor = Glass.Violet.copy(alpha = 0.35f)
         )
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(title, style = MaterialTheme.typography.titleLarge)
-            Spacer(Modifier.height(10.dp))
-            content()
-        }
-    }
+    )
 }
 
 @Composable
@@ -466,29 +517,6 @@ private fun ChipRow(content: @Composable () -> Unit) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         content()
-    }
-}
-
-@Composable
-private fun ToggleRow(
-    label: String,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-    supporting: String? = null
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(label, style = MaterialTheme.typography.bodyLarge)
-            if (supporting != null) {
-                Text(supporting, style = MaterialTheme.typography.bodyMedium)
-            }
-        }
-        Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
 
