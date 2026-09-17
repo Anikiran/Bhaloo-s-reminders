@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # A hung Gradle step should die quickly with logs, not sit for six hours.
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@v4
@@ -19,14 +21,25 @@ jobs:
           distribution: temurin
           java-version: "17"
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          accept-android-sdk-licenses: true
+          packages: "platforms;android-34 build-tools;34.0.0 platform-tools"
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: wrapper
+          cache-read-only: false
 
       - name: Run unit tests
-        run: ./gradlew testDebugUnitTest --no-daemon
+        timeout-minutes: 20
+        run: ./gradlew testDebugUnitTest --no-daemon --stacktrace --console=plain
 
       - name: Build installable APK
-        run: ./gradlew assembleRelease --no-daemon
+        timeout-minutes: 20
+        run: ./gradlew assembleRelease --no-daemon --stacktrace --console=plain
 
       - name: Name the APK after Bhaloo
         run: |
@@ -46,5 +59,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-report
-          path: app/build/reports/tests/
+          path: |
+            app/build/reports/
+            app/build/outputs/logs/
           if-no-files-found: ignore
