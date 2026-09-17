@@ -49,14 +49,22 @@ This is not a generic app with a name pasted on:
 
 ## Getting the APK onto Bhaloo's phone
 
-### Easiest: let GitHub build it
+### Easiest: grab the latest release
 
-Every push builds the app. Open the repo's **Actions** tab → the latest
-**Build Bhaloo's Reminders** run → download the **BhalooReminders-apk**
-artifact → unzip → send `BhalooReminders.apk` to Bhaloo (WhatsApp, Drive,
-cable — anything).
+Every push builds the app and republishes it here:
 
-On his phone: tap the APK, allow *Install unknown apps* when asked, install.
+**https://github.com/Anikiran/Bhaloo-s-reminders/releases/latest**
+
+Download the `BhalooReminders-vX.Y.apk` file attached to it and send that to
+Bhaloo (WhatsApp, Drive, cable — anything). That link always points at the
+newest build, so there is never a question of which file is the right one.
+
+On their phone: tap the APK, allow *Install unknown apps* when asked, install.
+Installing over an older copy is fine — existing reminders are kept.
+
+> The per-run artifacts under the **Actions** tab are build outputs from that
+> particular commit, including old ones. Use the release link above unless you
+> specifically want an older build.
 
 ### Or build it yourself
 

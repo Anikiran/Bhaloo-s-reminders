@@ -6,6 +6,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -42,17 +45,42 @@ jobs:
         run: ./gradlew assembleRelease --no-daemon --stacktrace --console=plain
 
       - name: Name the APK after Bhaloo
+        id: apk
         run: |
           mkdir -p out
-          cp app/build/outputs/apk/release/app-release.apk "out/BhalooReminders.apk"
+          VERSION=$(grep -oP 'versionName = "\K[^"]+' app/build.gradle.kts)
+          NAME="BhalooReminders-v${VERSION}.apk"
+          cp app/build/outputs/apk/release/app-release.apk "out/$NAME"
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Built $NAME"
 
-      # Download this, send it to Bhaloo, done.
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: BhalooReminders-apk
-          path: out/BhalooReminders.apk
+          name: BhalooReminders-${{ steps.apk.outputs.version }}-apk
+          path: out/*.apk
           if-no-files-found: error
+
+      # One permanent link that always points at the newest build, so there is
+      # never a question of which artifact to download:
+      #   https://github.com/Anikiran/Bhaloo-s-reminders/releases/latest
+      - name: Publish as the latest download
+        if: github.ref_name == 'claude/bhaloo-reminder-android-app-j6tb31'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Bhaloo's Reminders — latest
+          body: |
+            The newest build of Bhaloo's Reminders.
+
+            **Download `${{ steps.apk.outputs.name }}` below** and send it to Bhaloo.
+
+            Version ${{ steps.apk.outputs.version }}, built from `${{ github.sha }}`.
+            Installing over an older copy is fine — reminders are kept.
+          files: out/*.apk
+          prerelease: true
+          make_latest: true
 
       - name: Upload test report on failure
         if: failure()
