@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bhaloo.reminders.R
+import com.bhaloo.reminders.data.Maker
 import com.bhaloo.reminders.ui.theme.Glass
 import com.bhaloo.reminders.ui.theme.GlassPane
 import com.bhaloo.reminders.ui.theme.MeshBackground
@@ -114,6 +115,13 @@ fun WelcomeScreen(onDone: () -> Unit) {
                 Text(
                     text = stringResource(R.string.dedication_tagline_hi),
                     style = MaterialTheme.typography.bodyMedium,
+                    color = glassInkSoft(),
+                    textAlign = TextAlign.Center
+                )
+                Spacer(Modifier.height(18.dp))
+                Text(
+                    text = stringResource(R.string.made_by_line, Maker.NAME),
+                    style = MaterialTheme.typography.labelLarge,
                     color = glassInkSoft(),
                     textAlign = TextAlign.Center
                 )

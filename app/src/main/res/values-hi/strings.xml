@@ -8,6 +8,7 @@
     <string name="dedication_body">इस ऐप का हर रिमाइंडर तुम्हारे नाम है, भालू। ये तुमसे तुम्हारी भाषा में, ठीक उसी समय बात करेगा जो तुमने तय किया है।</string>
     <string name="signature_anonymous">भालू के लिए, दिल से बनाई गई।</string>
     <string name="signature_named">भालू के लिए %1$s ने बनाई।</string>
+    <string name="made_by_line">%1$s द्वारा बनाई गई</string>
     <string name="easter_egg_hint">भालू की फ़ोटो पर कुछ बार टैप करो…</string>
     <string name="easter_egg_title">अरे भालू! 🐻</string>
     <string name="easter_egg_body">मिल गया! किसी ने तुम्हारे लिए पूरी ऐप बना डाली, सिर्फ़ इसलिए कि तुम्हारा दिन सही चले। चाय पी लो।</string>
@@ -102,6 +103,9 @@
     <string name="settings_battery">बैटरी सेविंग से छूट दें</string>
     <string name="settings_battery_help">Xiaomi, Oppo, Vivo, OnePlus फ़ोन में Autostart भी चालू करना ज़रूरी है।</string>
     <string name="settings_rearm">सभी रिमाइंडर दोबारा सेट करें</string>
+    <string name="settings_test_alarm">टेस्ट: 1 मिनट बाद याद दिलाओ</string>
+    <string name="settings_test_alarm_help">ये दबाओ, फ़ोन लॉक करके रख दो। अगर एक मिनट में आवाज़ आ जाए तो बैकग्राउंड में सब ठीक है।</string>
+    <string name="settings_test_alarm_toast">एक मिनट बाद के लिए सेट। फ़ोन लॉक करके इंतज़ार करो।</string>
     <string name="settings_signature">हस्ताक्षर</string>
     <string name="settings_made_by">आपका नाम</string>
     <string name="settings_made_by_help">ये नाम डेडिकेशन पेज पर दिखेगा।</string>

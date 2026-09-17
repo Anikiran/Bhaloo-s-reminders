@@ -12,10 +12,11 @@
     <string name="dedication_body_hi">भालू, ये ऐप सिर्फ़ तुम्हारे लिए बनाई गई है। अब कुछ भी भूलने की ज़रूरत नहीं।</string>
     <string name="signature_anonymous">Made by hand, for Bhaloo.</string>
     <string name="signature_named">Made by hand for Bhaloo, by %1$s.</string>
+    <string name="made_by_line">Created by %1$s</string>
     <string name="easter_egg_hint">Tap Bhaloo\'s photo a few times…</string>
     <string name="easter_egg_title">Arre Bhaloo! 🐻</string>
     <string name="easter_egg_body">You found it. Ab toh yaad rakhna padega — someone actually built a whole app just so your day runs on time. Chai pee lo.</string>
-    <string name="version_line">Bhaloo\'s Reminders · v1.2</string>
+    <string name="version_line">Bhaloo\'s Reminders · v1.3</string>
 
     <!-- The birthday that ships with the app -->
     <string name="seed_birthday_title">Bhaloo\'s Birthday</string>
@@ -119,6 +120,11 @@
     <string name="settings_battery">Ignore battery optimisation</string>
     <string name="settings_battery_help">On Xiaomi, Oppo, Vivo and OnePlus phones, also turn on Autostart for this app or Android may kill it before a reminder fires.</string>
     <string name="settings_rearm">Re-arm all reminders</string>
+    <string name="settings_test_alarm">Test it: remind me in 1 minute</string>
+    <string name="settings_test_alarm_help">Press this, lock the phone and put it down. If it speaks in a minute with the screen off, background delivery works on this phone. If nothing happens, Autostart or battery settings are blocking it.</string>
+    <string name="settings_test_alarm_title">Background test</string>
+    <string name="settings_test_alarm_message">Bhaloo, the background test worked. Reminders will reach you even when the app is closed.</string>
+    <string name="settings_test_alarm_toast">Set for one minute from now. Lock the phone and wait.</string>
     <string name="settings_signature">Signature</string>
     <string name="settings_made_by">Your name</string>
     <string name="settings_made_by_help">Shown on the dedication page, so Bhaloo always knows who this came from.</string>

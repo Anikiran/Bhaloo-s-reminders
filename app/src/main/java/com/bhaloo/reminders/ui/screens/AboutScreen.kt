@@ -39,6 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bhaloo.reminders.R
+import com.bhaloo.reminders.data.Maker
 import com.bhaloo.reminders.ui.ReminderViewModel
 import com.bhaloo.reminders.ui.theme.Glass
 import com.bhaloo.reminders.ui.theme.GlassCircleButton
@@ -144,13 +145,9 @@ fun AboutScreen(viewModel: ReminderViewModel, onClose: () -> Unit) {
                     }
                 }
 
-                val signature = store.madeBy
+                // Baked in, not stored: see data/Maker.kt.
                 Text(
-                    text = if (signature.isBlank()) {
-                        stringResource(R.string.signature_anonymous)
-                    } else {
-                        stringResource(R.string.signature_named, signature)
-                    },
+                    text = stringResource(R.string.signature_named, Maker.NAME),
                     style = MaterialTheme.typography.bodyLarge,
                     color = glassInk(),
                     textAlign = TextAlign.Center

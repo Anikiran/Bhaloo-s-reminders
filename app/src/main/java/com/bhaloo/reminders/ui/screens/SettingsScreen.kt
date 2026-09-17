@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.widget.Toast
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -63,7 +64,6 @@ fun SettingsScreen(viewModel: ReminderViewModel, onClose: () -> Unit) {
     var snooze by remember { mutableIntStateOf(store.snoozeMinutes) }
     var rate by remember { mutableFloatStateOf(store.speechRate) }
     var pitch by remember { mutableFloatStateOf(store.speechPitch) }
-    var madeBy by remember { mutableStateOf(store.madeBy) }
     var spokenName by remember { mutableStateOf(store.spokenNameEnglish) }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -323,26 +323,42 @@ fun SettingsScreen(viewModel: ReminderViewModel, onClose: () -> Unit) {
                         ) {
                             Text(stringResource(R.string.settings_rearm), color = glassInk())
                         }
-                    }
-                }
 
-                // ---- Signature --------------------------------------------
-                GlassSection(stringResource(R.string.settings_signature)) {
-                    Column {
-                        GlassField(
-                            value = madeBy,
-                            onValueChange = { madeBy = it; store.madeBy = it },
-                            placeholder = stringResource(R.string.settings_made_by),
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                        Spacer(Modifier.height(14.dp))
+                        GlassButton(
+                            onClick = {
+                                viewModel.scheduleBackgroundTest(
+                                    context.getString(R.string.settings_test_alarm_title),
+                                    context.getString(R.string.settings_test_alarm_message)
+                                )
+                                Toast.makeText(
+                                    context,
+                                    R.string.settings_test_alarm_toast,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            fill = Glass.secondaryFill,
+                            glowColor = Glass.shadowMint,
+                            height = 50.dp
+                        ) {
+                            Text(
+                                stringResource(R.string.settings_test_alarm),
+                                color = Color.White,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
                         Spacer(Modifier.height(8.dp))
                         Text(
-                            stringResource(R.string.settings_made_by_help),
+                            stringResource(R.string.settings_test_alarm_help),
                             style = MaterialTheme.typography.bodyMedium,
                             color = glassInkSoft()
                         )
                     }
                 }
+
+                // The maker's credit is a constant in data/Maker.kt, not a
+                // setting — there is deliberately nothing to edit here.
             }
         }
     }

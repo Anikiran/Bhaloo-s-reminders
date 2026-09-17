@@ -67,5 +67,28 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
 
     fun rescheduleAll() = ReminderScheduler.rescheduleAll(app, reminders.value)
 
+    /**
+     * Schedules a real reminder 60 seconds out so background delivery can be
+     * proved on the phone itself: press it, lock the phone, put it down.
+     *
+     * It is an ordinary one-shot reminder — it goes through exactly the same
+     * alarm, receiver and speaking path as every other one, which is the whole
+     * point. Anything simpler would test a different code path than the one
+     * that matters.
+     */
+    fun scheduleBackgroundTest(title: String, message: String) {
+        save(
+            Reminder(
+                id = 0L,
+                title = title,
+                spokenMessage = message,
+                language = VoiceLanguage.ENGLISH,
+                timeMillis = System.currentTimeMillis() + 60_000L,
+                repeat = com.bhaloo.reminders.data.RepeatMode.ONCE,
+                speakTimes = 1
+            )
+        )
+    }
+
     fun canScheduleExact(): Boolean = ReminderScheduler.canScheduleExact(app)
 }
