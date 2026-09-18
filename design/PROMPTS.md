@@ -17,10 +17,13 @@ Image models will not give you clean transparency. Magenta appears nowhere in
 glass, so I can cut it out perfectly. Do not ask for "transparent background"
 or a checkerboard — ask for solid magenta.
 
-**3. The shadow and the caustic must be INSIDE the frame.**
-Below and to the right of the shape, since the light is top-left. Leave room —
-tell it "generous empty margin around the object". If the caustic is clipped at
-the frame edge, the asset is unusable.
+**3. The background is a WALL, and the shadow falls ON it.**
+Not a floor. If you say "product render" or "shadow beneath the object", the
+model builds a ground plane and stands the button on it, and the shadow then
+points the wrong way once the button is placed in the UI. Say "flat vertical
+wall", "floats in front of the wall", "shadow onto the wall behind it". The
+shadow and caustic must also sit fully INSIDE the frame — leave a generous
+margin, or they get clipped and the asset is unusable.
 
 **4. The middle must be laterally uniform.**
 For anything pill-shaped, the bright highlight runs ALONG the top edge, left to
@@ -49,19 +52,28 @@ to hit the dimensions — that is my job. You only need to get the **look** righ
 
 ## The base style block — paste this into every prompt
 
-> Photorealistic 3D product render of a single piece of thick polished glass,
-> octane render quality, studio lighting. The glass has real thickness and you
-> can see through its body; its curved edge bends and distorts what is behind
-> it. A strong blown-out specular highlight runs along the top-left edge where
-> the light strikes it. Faint rainbow chromatic dispersion where the light
-> splits at the rim. Below the object, a soft transparent coloured shadow and a
-> bright focused caustic — light concentrated through the glass onto the
-> surface. Key light from the top-left at 45 degrees. Shot perfectly straight
-> on, orthographic, no perspective, no tilt. Centred on a flat solid magenta
-> #FF00FF background, generous empty margin all around. No text, no logo, no
-> letters, no UI, no hands, no reflections of a room.
+**The background is a WALL, not a floor.** Say so explicitly, or the model
+builds a ground plane and stands the button on it.
 
----
+> A flat graphic asset render, not a product photograph. The camera looks
+> straight at a flat vertical wall that completely fills the frame. The wall is
+> solid magenta #FF00FF. There is NO floor, NO ground, NO tabletop, NO horizon
+> and NO perspective — nothing recedes into the distance.
+>
+> A single piece of thick polished glass floats about two centimetres IN FRONT
+> of this wall, parallel to it, facing the camera dead-on. The glass has real
+> thickness; you can see through its body and its curved edge bends what is
+> behind it. A strong blown-out white specular highlight runs evenly ALONG the
+> top-left edge. Faint rainbow chromatic dispersion at the rim.
+>
+> A single soft key light from the top-left at 45 degrees. Because the glass
+> floats in front of the wall, it casts a soft transparent shadow ONTO THE WALL
+> BEHIND IT, offset slightly down and to the right — close and tight, not long
+> and dramatic. A bright focused caustic sits on the wall inside that shadow.
+>
+> Centred, filling about 80% of the frame width, generous empty magenta wall
+> all around. No text, no logo, no letters, no UI, no hands, no floor, no
+> tabletop.
 
 ## The ten assets
 
