@@ -11,6 +11,7 @@ import com.bhaloo.reminders.data.Reminder
 import com.bhaloo.reminders.data.ReminderStore
 import com.bhaloo.reminders.data.VoiceLanguage
 import com.bhaloo.reminders.notify.Notifications
+import com.bhaloo.reminders.speech.BhalooSpeaker
 import com.bhaloo.reminders.speech.SpeakerService
 import kotlinx.coroutines.flow.StateFlow
 
@@ -43,27 +44,30 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
         else ReminderScheduler.cancel(app, reminder.id)
     }
 
-    /** "Hear it now" button in the editor — speaks exactly what will be said later. */
+    /**
+     * "Hear it now" in the editor — speaks exactly what will be said later.
+     *
+     * Deliberately does NOT go through [SpeakerService]. Starting a foreground
+     * service costs most of a second, which is absurd for a button whose only
+     * job is to answer immediately; the shared engine is already warm, so this
+     * speaks more or less the moment it is tapped.
+     */
     fun preview(text: String, language: VoiceLanguage, special: Boolean = false) {
-        val intent = Intent(app, SpeakerService::class.java).apply {
-            putExtra(SpeakerService.EXTRA_TEXT, text)
-            putExtra(SpeakerService.EXTRA_LANGUAGE, language.name)
-            putExtra(SpeakerService.EXTRA_TIMES, 1)
-            putExtra(SpeakerService.EXTRA_SPECIAL, special)
-            putExtra(SpeakerService.EXTRA_DELAY_MS, 150L)
-        }
-        runCatching {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                ContextCompat.startForegroundService(app, intent)
-            } else {
-                app.startService(intent)
-            }
-        }
+        BhalooSpeaker.nudgeAlarmVolume(app)
+        BhalooSpeaker.speak(
+            context = app,
+            text = text,
+            language = language,
+            times = 1,
+            special = special,
+            spokenNameEnglish = store.spokenNameEnglish,
+            rate = store.speechRate,
+            pitch = store.speechPitch,
+            onFinished = {}
+        )
     }
 
-    fun stopPreview() {
-        runCatching { app.stopService(Intent(app, SpeakerService::class.java)) }
-    }
+    fun stopPreview() = BhalooSpeaker.stop()
 
     fun rescheduleAll() = ReminderScheduler.rescheduleAll(app, reminders.value)
 

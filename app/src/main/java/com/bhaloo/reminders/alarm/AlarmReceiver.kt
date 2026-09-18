@@ -33,10 +33,12 @@ class AlarmReceiver : BroadcastReceiver() {
                 putExtra(SpeakerService.EXTRA_TIMES, reminder.speakTimes)
                 putExtra(SpeakerService.EXTRA_ID, reminder.id)
                 putExtra(SpeakerService.EXTRA_SPECIAL, reminder.isSpecialDay)
-                // Let the notification chime finish before speaking over it.
+                // Just enough for the (now much shorter) chime to land first.
+                // This used to be 1400ms to clear a 2.1-second chime, which by
+                // itself made every reminder feel late.
                 putExtra(
                     SpeakerService.EXTRA_DELAY_MS,
-                    if (reminder.alertStyle == AlertStyle.BOTH) 1400L else 300L
+                    if (reminder.alertStyle == AlertStyle.BOTH) 260L else 0L
                 )
             }
             runCatching {

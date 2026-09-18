@@ -5,6 +5,7 @@ import com.bhaloo.reminders.alarm.ReminderScheduler
 import com.bhaloo.reminders.data.BirthdaySeed
 import com.bhaloo.reminders.data.ReminderStore
 import com.bhaloo.reminders.notify.Notifications
+import com.bhaloo.reminders.speech.BhalooSpeaker
 
 /**
  * Bhaloo's Reminders — built for one person in particular.
@@ -23,6 +24,10 @@ class BhalooApp : Application() {
         store = ReminderStore(this)
         Notifications.createChannels(this)
         store.installedAt // stamps the "together since" date on first launch
+        // Binding a TTS engine takes one to three seconds. Starting it now —
+        // which also happens when an alarm wakes the process — means that cost
+        // overlaps the notification work instead of delaying the speech.
+        BhalooSpeaker.warmUp(this)
         seedBirthday()
         ReminderScheduler.rescheduleAll(this, store.reminders.value)
     }

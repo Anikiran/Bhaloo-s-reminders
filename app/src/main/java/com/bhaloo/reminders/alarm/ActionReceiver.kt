@@ -47,7 +47,7 @@ class ActionReceiver : BroadcastReceiver() {
                     putExtra(SpeakerService.EXTRA_LANGUAGE, reminder.language.name)
                     putExtra(SpeakerService.EXTRA_TIMES, 1)
                     putExtra(SpeakerService.EXTRA_ID, reminder.id)
-                    putExtra(SpeakerService.EXTRA_DELAY_MS, 200L)
+                    putExtra(SpeakerService.EXTRA_DELAY_MS, 0L)
                 }
                 runCatching {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
