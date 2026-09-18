@@ -1,0 +1,77 @@
+BhalooGlassKit.blend  -  open this and adjust it yourself
+=========================================================
+
+Double-click BhalooGlassKit.blend, or open Blender and use File > Open.
+
+
+DO THESE 3 THINGS FIRST
+-----------------------
+The file may open with the wrong render settings. Check these three:
+
+1. Render Properties (the camera-back icon, left column of tabs)
+     Render Engine  ->  CYCLES
+   Glass only looks like glass in Cycles. Eevee fakes it and looks flat.
+
+2. Same panel, scroll to  Film  ->  tick  Transparent
+   This is what makes the PNG background see-through.
+
+3. Same panel, scroll to  Color Management  ->  View Transform  ->  Standard
+   The default is AgX, which deliberately washes out saturated colour.
+   This one setting is why my early renders looked like dusty lavender.
+
+Then press F12 to render, and F11 to see the result.
+
+
+WHAT IS IN THE FILE
+-------------------
+GLASS_ASSETS        the 10 pieces, laid out down the screen
+STUDIO_edit_these   3 light panels + the camera
+
+There is also a text file inside Blender itself: switch an area to the
+Text Editor and open READ_ME_FIRST for the same notes.
+
+
+THE 4 THINGS THAT ACTUALLY CHANGE HOW GLASSY IT LOOKS
+------------------------------------------------------
+1. THE LIGHT PANELS, more than the material.
+   The bright streak on a button IS a reflection of LIGHT_top_streak.
+   Move or rotate that panel and the streak moves with it.
+
+   They sit BEHIND the camera deliberately. Looking at a glossy surface
+   face-on, you see reflected whatever is behind the lens - so a panel
+   placed in front lights the object but never appears in it. That was
+   why several of my early attempts had no highlight at all.
+
+   Brightness: select panel > Material Properties > Emission > Strength.
+
+2. THICKNESS. Select a button > Modifier Properties (wrench):
+     1_outline_roundness  = how round the ends are
+     2_rim_thickness      = how rounded the edge is
+   Careful: push 2_rim_thickness past about 0.6 of the object's Z size and
+   the top and bottom roundings meet in the middle, leaving a seam line.
+
+3. COLOUR DEPTH is the Volume Absorption node, NOT Base Color.
+   Material Properties > scroll down to Volume > Density.
+   Higher = deeper, richer glass. This is the difference between
+   "coloured glass" and "tinted plastic".
+
+4. If it still looks FLAT, it is nearly always one of these:
+     - View Transform still on AgX instead of Standard
+     - light panels in front of the camera rather than behind it
+     - the object is too thin  (select it, raise Z in the N-panel)
+     - render engine still on Eevee
+
+
+SAVING A PIECE AS PNG
+---------------------
+Select the piece > View > Frame Selected > move the CAMERA to suit >
+F12 > in the render window: Image > Save As > PNG, RGBA.
+
+Send the PNGs back to me and I will crop, size and wire them into the app.
+
+
+IF THE FILE WILL NOT OPEN
+-------------------------
+It was written by Blender 5.2. Blender cannot open files newer than
+itself. If yours is older, tell me your version number
+(Blender > top right, or Help > About) and I will save you one that fits.

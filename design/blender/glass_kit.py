@@ -181,6 +181,18 @@ def reflector(name, loc, rot, sx, sy, strength):
     p.select_set(False)
 
 
+def frame_scale(hw, hh, res, margin=1.16):
+    """Ortho scale that fits BOTH axes.
+
+    Blender's ortho_scale spans the WIDER image dimension, so on a 1120x216
+    frame an ortho_scale of 3.3 leaves only 3.3 * 216/1120 = 0.64 units of
+    visible height — and the button is 0.80 tall. Every wide asset was being
+    cropped top and bottom until this was worked out from the numbers.
+    """
+    rx, ry = res
+    return max(2.0 * hw, 2.0 * hh * rx / ry) * margin
+
+
 def studio(ortho_scale):
     reflector("key",    (0.0,  3.2, 6.0), (math.radians(36), 0, 0), 4.0, 1.25, 16)
     reflector("bottom", (0.2, -3.2, 5.0), (math.radians(-32), 0, 0), 3.6, 0.55, 11)
@@ -199,7 +211,7 @@ def render_asset(name, out_dir, samples=180):
     sc = setup_scene(res, samples)
     ob = pill(name, hw, hh, ht, corner)
     ob.data.materials.append(glass(name + "_m", rgb, density))
-    studio(ortho_scale=hw * 2.28)
+    studio(ortho_scale=frame_scale(hw, hh, res))
     sc.render.filepath = os.path.join(out_dir, name + ".png")
     bpy.ops.render.render(write_still=True)
     return sc.render.filepath
