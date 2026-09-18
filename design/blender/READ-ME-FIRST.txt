@@ -1,0 +1,57 @@
+BHALOO GLASS KIT - how to render the buttons
+=============================================
+
+You do NOT need to open Blender or learn it. Two files do everything.
+
+
+WHAT YOU NEED
+-------------
+These 3 files, all together in ONE folder (anywhere, e.g. D:\glasskit\):
+
+    glass_kit.py          <- the recipe
+    PREVIEW-FAST.bat      <- quick test
+    RENDER-GLASS.bat      <- the real thing
+
+
+STEP 1 - quick test (about 30 seconds)
+--------------------------------------
+Double-click:  PREVIEW-FAST.bat
+
+A black window opens with scrolling text. That is normal - it is Blender
+working. When it finishes, a folder opens with 2 PNG files.
+
+Look at them. If you see two glass pills, everything works. Go to step 2.
+
+If it says "Could not find blender.exe":
+    Drag your blender.exe file and DROP it onto PREVIEW-FAST.bat.
+    That's all - it will then run.
+
+
+STEP 2 - the full set (a few minutes)
+-------------------------------------
+Double-click:  RENDER-GLASS.bat
+
+It renders all 10 pieces and opens the folder when done.
+
+
+STEP 3 - send them to me
+------------------------
+Attach the PNG files from the "renders" folder in the chat.
+I do the rest - cropping, sizing, and putting them into the app.
+
+
+GOOD TO KNOW
+------------
+* The black window is not an error. Closing it cancels the render.
+* The first run is slower - Blender is warming up.
+* The script uses your graphics card automatically if it can. The window
+  prints which one near the top, e.g. "compute device -> OPTIX: ...".
+  If it says "CPU (no GPU found)" it still works, just slower.
+* Nothing is installed or changed on your PC. It only writes PNG files
+  into the "renders" folder next to these files.
+
+
+IF SOMETHING GOES WRONG
+-----------------------
+Copy the text from the black window and paste it in the chat.
+The message will say exactly what the problem is.

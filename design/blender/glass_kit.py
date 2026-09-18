@@ -40,17 +40,21 @@ MINT   = (0.16, 0.85, 0.76, 1.0)
 PINK   = (0.98, 0.62, 0.83, 1.0)
 CLEAR  = None
 
-# name -> (half width, half height, half thickness, colour, absorption, px)
+# name -> (half width, half height, half thickness, colour, absorption,
+#          corner radius or None for a full pill, output pixels)
 ASSETS = {
-    "btn_primary":   (1.45, 0.40, 0.21, VIOLET, 9.0, (1120, 216)),
-    "btn_secondary": (1.45, 0.40, 0.21, MINT,   9.0, (1120, 216)),
-    "btn_clear":     (1.45, 0.38, 0.20, CLEAR,  0.0, (1120, 200)),
-    "chip":          (0.80, 0.40, 0.20, CLEAR,  0.0, (480, 160)),
-    "field":         (1.64, 0.36, 0.17, CLEAR,  0.0, (1312, 224)),
-    "circle_48":     (0.42, 0.42, 0.22, CLEAR,  0.0, (192, 192)),
-    "circle_42":     (0.40, 0.40, 0.20, CLEAR,  0.0, (168, 168)),
-    "switch_track":  (0.56, 0.34, 0.16, CLEAR,  0.0, (224, 136)),
-    "switch_knob":   (0.26, 0.26, 0.24, CLEAR,  0.0, (104, 104)),
+    "btn_primary":   (1.45, 0.40, 0.21, VIOLET, 9.0, None, (1120, 216)),
+    "btn_secondary": (1.45, 0.40, 0.21, MINT,   9.0, None, (1120, 216)),
+    "btn_clear":     (1.45, 0.38, 0.20, CLEAR,  0.0, None, (1120, 200)),
+    "chip":          (0.80, 0.40, 0.20, CLEAR,  0.0, None, (480, 160)),
+    "field":         (1.64, 0.36, 0.17, CLEAR,  0.0, None, (1312, 224)),
+    "circle_48":     (0.42, 0.42, 0.22, CLEAR,  0.0, None, (192, 192)),
+    "circle_42":     (0.40, 0.40, 0.20, CLEAR,  0.0, None, (168, 168)),
+    "switch_track":  (0.56, 0.34, 0.16, CLEAR,  0.0, None, (224, 136)),
+    "switch_knob":   (0.26, 0.26, 0.24, CLEAR,  0.0, None, (104, 104)),
+    # The hero card: a rounded rectangle, not a pill, and frosted rather than
+    # clear so it reads as a panel you could lay text on.
+    "card":          (1.64, 0.90, 0.16, PINK,   1.6, 0.26, (1312, 720)),
 }
 
 
@@ -59,10 +63,38 @@ def reset():
         bpy.data.objects.remove(o, do_unlink=True)
 
 
+def use_gpu_if_available():
+    """Switch Cycles to the GPU. This is the point of rendering locally: the
+    same frame that takes minutes on a cloud CPU takes seconds on a GPU."""
+    try:
+        prefs = bpy.context.preferences.addons["cycles"].preferences
+    except Exception:
+        return "CPU (no cycles prefs)"
+    for kind in ("OPTIX", "CUDA", "HIP", "ONEAPI", "METAL"):
+        try:
+            prefs.compute_device_type = kind
+            prefs.get_devices()
+            devs = [d for d in prefs.devices if d.type == kind]
+            if devs:
+                for d in prefs.devices:
+                    d.use = (d.type == kind or d.type == "CPU")
+                return kind + ": " + ", ".join(d.name for d in devs)
+        except Exception:
+            continue
+    return "CPU (no GPU found)"
+
+
+GPU_INFO = None
+
+
 def setup_scene(res, samples=150):
+    global GPU_INFO
     sc = bpy.context.scene
     sc.render.engine = "CYCLES"
-    sc.cycles.device = "CPU"
+    if GPU_INFO is None:
+        GPU_INFO = use_gpu_if_available()
+        print("[glass_kit] compute device ->", GPU_INFO)
+    sc.cycles.device = "CPU" if GPU_INFO.startswith("CPU") else "GPU"
     sc.cycles.samples = samples
     sc.cycles.use_denoising = True
     sc.cycles.caustics_refractive = True
@@ -83,8 +115,12 @@ def setup_scene(res, samples=150):
     return sc
 
 
-def pill(name, hw, hh, ht):
-    """Cube plus two bevels — see finding 2 and finding 3."""
+def pill(name, hw, hh, ht, corner=None):
+    """Cube plus two bevels — see finding 2 and finding 3.
+
+    corner=None gives a full pill (ends rounded to a semicircle); a number
+    gives a rounded rectangle of that corner radius, for the card.
+    """
     bpy.ops.mesh.primitive_cube_add(size=2, location=(0, 0, 0))
     ob = bpy.context.active_object; ob.name = name
     ob.scale = (hw, hh, ht)
@@ -101,7 +137,9 @@ def pill(name, hw, hh, ht):
     bm.to_mesh(me); bm.free()
 
     b1 = ob.modifiers.new("outline", "BEVEL")
-    b1.limit_method, b1.width, b1.segments = "WEIGHT", hh * 0.995, 32
+    b1.limit_method = "WEIGHT"
+    b1.width = (hh * 0.995) if corner is None else corner
+    b1.segments = 32
     b2 = ob.modifiers.new("rim", "BEVEL")
     b2.limit_method, b2.angle_limit = "ANGLE", math.radians(30)
     # Kept well under the half-thickness: at ~0.9 the top and bottom roundings
@@ -155,11 +193,11 @@ def studio(ortho_scale):
     bpy.context.scene.camera = ob
 
 
-def render_asset(name, out_dir):
-    hw, hh, ht, rgb, density, res = ASSETS[name]
+def render_asset(name, out_dir, samples=180):
+    hw, hh, ht, rgb, density, corner, res = ASSETS[name]
     reset()
-    sc = setup_scene(res)
-    ob = pill(name, hw, hh, ht)
+    sc = setup_scene(res, samples)
+    ob = pill(name, hw, hh, ht, corner)
     ob.data.materials.append(glass(name + "_m", rgb, density))
     studio(ortho_scale=hw * 2.28)
     sc.render.filepath = os.path.join(out_dir, name + ".png")
@@ -173,6 +211,11 @@ if __name__ == "__main__":
     if "--out" in argv:
         out = argv[argv.index("--out") + 1]
     os.makedirs(out, exist_ok=True)
-    only = argv[argv.index("--only") + 1].split(",") if "--only" in argv else ASSETS
-    for n in only:
-        print("rendering", n, "->", render_asset(n, out))
+    samples = int(argv[argv.index("--samples") + 1]) if "--samples" in argv else 180
+    only = argv[argv.index("--only") + 1].split(",") if "--only" in argv else list(ASSETS)
+    print("[glass_kit] rendering %d asset(s) at %d samples into %s"
+          % (len(only), samples, out))
+    for i, n in enumerate(only, 1):
+        print("[glass_kit] (%d/%d) %s" % (i, len(only), n))
+        print("[glass_kit]     -> " + render_asset(n, out, samples))
+    print("[glass_kit] DONE. %d file(s) in %s" % (len(only), out))
